@@ -1,0 +1,26 @@
+.topbar {
+    height: 60px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .logo{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+
+        .icon{
+            font-size: 30px;
+            color: #f54749;
+        }
+    }
+
+    p{
+        color: #a0a0a0;
+        text-transform: capitalize;
+    }
+}

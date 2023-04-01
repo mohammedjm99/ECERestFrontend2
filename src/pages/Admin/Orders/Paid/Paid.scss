@@ -1,0 +1,43 @@
+.paid {
+    flex: 1;
+
+    .empty {
+        color: #f54749;
+        margin-top: 60px;
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .loading{
+        margin-top: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .t {
+        color: #f54749;
+        text-transform: capitalize;
+        height: 80px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .date {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+            padding: 10px 15px;
+        }
+    }
+
+    .table {
+        width: 600px;
+        margin: 20px auto;
+    }
+}

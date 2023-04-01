@@ -1,0 +1,135 @@
+.inprogresstable {
+    flex: 1;
+
+    .empty{
+        color: #f54749;
+        margin-top: 60px;
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .loading{
+        margin-top: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .t {
+        color: #f54749;
+        text-transform: capitalize;
+        height: 80px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .n {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        
+        p {
+            color: #a0a0a0;
+            font-size: 24px;
+            transition: 0.3s;
+        }
+
+        .arrow {
+            width: 45px;
+            height: 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #a0a0a0;
+            color: #a0a0a0;
+            transition: 0.3s;
+
+            &:hover{
+                border-color: #2e2e2e;
+                color: #2e2e2e;
+            }
+        }
+    }
+
+    .orders {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+
+        .order {
+            box-shadow: 0 0 10px #dadada;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            width: 250px;
+            flex-direction: column;
+            gap: 5px;
+            height: fit-content;
+
+            h2{
+                text-transform: capitalize;
+            }
+
+            .food{
+                p {
+                    font-weight: 500;
+
+                    &:nth-child(2){
+                        color: #a0a0a0;
+                    }
+
+                    span {
+                        color: #f54749;
+                    }
+                }
+            }
+
+            .bottom{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 5px;
+                
+                .total {
+                    font-weight: 500;
+                    font-size: 18px;
+    
+                    span{
+                        color: #f54749;
+                    }
+                }
+
+                button {
+                    padding: 5px 10px;
+                    outline: none;
+                    border: 2px solid;
+                    background-color: initial;
+                    border-radius: 5px;
+                    font-size: 14px;
+                    text-transform: capitalize;
+                    cursor: pointer;
+                    transition: 0.3s;
+
+                    &:disabled{
+                        cursor: wait;
+                    }
+                }
+            }
+
+        }
+    }
+
+
+    hr {
+        border: 0;
+        border-top: 1px solid #ccc;
+        margin-top: 5px;
+    }
+}
