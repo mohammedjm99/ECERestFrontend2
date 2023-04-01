@@ -1,12 +1,12 @@
 import { request } from '../../api/axiosMethods';
 import './Left.scss';
 import io from 'socket.io-client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import jwtDecode from 'jwt-decode';
 
 
 const Left = ({ orders, setOrders, token }) => {
-    
+    const socket = useRef();
     const inputRefs = {};
 
     useEffect(() => {
