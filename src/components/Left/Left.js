@@ -3,7 +3,6 @@ import './Left.scss';
 import io from 'socket.io-client';
 import { useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
-const socket = io('http://172.20.10.4:3002');
 
 
 const Left = ({ orders, setOrders, token }) => {
