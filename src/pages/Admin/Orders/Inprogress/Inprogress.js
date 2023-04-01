@@ -16,7 +16,7 @@ const Inprogress = ({ setNavbarIndex }) => {
     const socket = useRef();
 
     useEffect(() => {
-        socket.current = io("http://172.20.10.4:3002");
+        socket.current = io("https://ecerestbackend.onrender.com");
         try{
             const decoded = jwtDecode(token);
             socket.current.emit('joinAdmin',decoded._id);
