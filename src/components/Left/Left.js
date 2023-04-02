@@ -1,30 +1,15 @@
 import { request } from '../../api/axiosMethods';
 import './Left.scss';
-import io from 'socket.io-client';
-import { useEffect, useRef } from 'react';
-import jwtDecode from 'jwt-decode';
+import { useEffect } from 'react';
 
 
-const Left = ({ orders, setOrders, token }) => {
-    const socket = useRef();
+const Left = ({ orders, setOrders, token , socket}) => {
     const inputRefs = {};
 
     useEffect(() => {
-        socket.current = io("https://ecerestbackend.onrender.com");
-        try{
-            const decoded = jwtDecode(token);
-            socket.current.emit('joinChief',decoded._id);
-        }catch(e){
-        }
-        
-        socket.current.on("addOrder",data=>{
-            console.log(orders);
+        socket.on("addOrder",data=>{
             setOrders(p=>[...p,data])
         })
-
-        return () => {
-            socket.current.disconnect();
-        };
     }, []);
 
     const handleContol = async ({ id, status }) => {

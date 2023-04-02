@@ -1,29 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { request } from '../../../../api/axiosMethods';
 import CircularProgress from '@mui/material/CircularProgress';
 import './Inprogress.scss';
-import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
-import io from 'socket.io-client';
 
-const Inprogress = ({ setNavbarIndex }) => {
+const Inprogress = ({ setNavbarIndex , socket}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [tablesWithOrders, setTablesWithOrders] = useState(null);
     const [total, setTotal] = useState(null);
-    const token = Cookies.get('token') || null;
-    const socket = useRef();
 
     useEffect(() => {
-        socket.current = io("https://ecerestbackend.onrender.com");
-        try{
-            const decoded = jwtDecode(token);
-            socket.current.emit('joinAdmin',decoded._id);
-        }catch(e){
-        }
-        
-        socket.current.on("addOrder",data=>{
+        socket.on("addOrder",data=>{
             setTablesWithOrders(p => {
                 const newState = {
                   ...p,
@@ -36,10 +24,6 @@ const Inprogress = ({ setNavbarIndex }) => {
               });
               setTotal(p=>p+1);
         })
-
-        return () => {
-            socket.current.disconnect();
-        };
     }, []);
 
     useEffect(() => {

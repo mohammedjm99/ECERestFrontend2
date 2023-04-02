@@ -132,8 +132,6 @@ const Paid = ({ setNavbarIndex }) => {
         setPage(0);
     };
 
-    console.log(rows);
-
     return (
         <div className="paid">
             <h1 className='t'>Paid Orders</h1>

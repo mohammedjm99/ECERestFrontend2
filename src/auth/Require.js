@@ -4,12 +4,28 @@ import {request} from '../api/axiosMethods';
 import Cookies from "js-cookie";
 import CircularProgress from '@mui/material/CircularProgress';
 import {Outlet} from 'react-router-dom';
+import jwtDecode from "jwt-decode";
 
-export const Requirechief = ({children})=>{
+export const Requirechief = ({children,socket})=>{
     const [showChief,setShowChief] = useState(false);
     const navigate = useNavigate();
     const token = Cookies.get('token');
-    // console.log('require chief')
+
+    useEffect(()=>{
+        if(showChief){
+            try{
+                const decoded = jwtDecode(token);
+                socket.emit("joinChief",decoded._id);
+            }catch(e){
+    
+            }
+    
+            return()=>{
+                socket.disconnect();
+            }
+        }
+    },[showChief])
+
     useEffect(()=>{
         const fetch = async()=>{
             try{
@@ -30,11 +46,26 @@ export const Requirechief = ({children})=>{
     )
 }
 
-export const Requireadmin = ()=>{
+export const Requireadmin = ({socket})=>{
     const [showAdmin,setShowAmin] = useState(false);
     const navigate = useNavigate();
     const token = Cookies.get('token');
-    // console.log('require admin')
+
+    useEffect(()=>{
+        if(showAdmin){
+            try{
+                const decoded = jwtDecode(token);
+                socket.emit("joinAdmin",decoded._id);
+            }catch(e){
+    
+            }
+    
+            return()=>{
+                socket.disconnect();
+            }
+        }
+    },[showAdmin])
+
     useEffect(()=>{
         const fetch = async()=>{
             try{

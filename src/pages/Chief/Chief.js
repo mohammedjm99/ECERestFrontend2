@@ -5,7 +5,7 @@ import Right from '../../components/Right/Right';
 import { useEffect, useState } from 'react';
 import {request} from '../../api/axiosMethods';
 
-const Chief = ()=>{
+const Chief = ({socket})=>{
     const token = Cookies.get('token') || null;
     const [orders,setOrders] = useState(null);
     const [tables,setTables] = useState(null);
@@ -25,7 +25,7 @@ const Chief = ()=>{
     },[token]);
     return(
         <div className="chief">
-            <Left orders={orders} setOrders={setOrders} token={token}/>
+            <Left orders={orders} setOrders={setOrders} token={token} socket={socket}/>
             <Right tables={tables}/>
         </div>
     )

@@ -17,11 +17,13 @@ import Createproducts from './pages/Admin/Products/Createproducts/Createproducts
 import Createusers from "./pages/Admin/Users/Createusers/Createusers";
 import Veusers from "./pages/Admin/Users/Veusers/Veusers";
 import Inprogresstable from './pages/Admin/Orders/Inprogresstable/Inprogresstable';
+import { Ws } from './api/socketLink';
+import io from 'socket.io-client';
+const socket = io(Ws);
 
 const App = () => {
 
   const [navbarIndex,setNavbarIndex] = useState(0);
-
   const Withnavbar = ({children})=>{
     return(
       <div style={{display:'flex'}}>
@@ -37,15 +39,15 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login />} />
 
-          <Route path='chief' element={<Requirechief><Chief /></Requirechief>} />
+          <Route path='chief' element={<Requirechief socket={socket}><Chief socket={socket}/></Requirechief>} />
 
-          <Route path="admin" element={<Requireadmin/>}>
+          <Route path="admin" element={<Requireadmin socket={socket}/>}>
             <Route index element={<Withnavbar><Dashboard setNavbarIndex={setNavbarIndex}/></Withnavbar>} />
 
             <Route path="orders">
               <Route path="create" element={<Withnavbar><Createorders setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
               <Route path="inprogress">
-                <Route index element={<Withnavbar><Inprogress setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
+                <Route index element={<Withnavbar><Inprogress socket={socket} setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
                 <Route path=':id' element={<Withnavbar><Inprogresstable setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
               </Route>
               <Route path="paid" element={<Withnavbar><Paid setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>

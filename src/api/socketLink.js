@@ -1,0 +1,1 @@
+export const Ws = "https://ecerestwebsocket.onrender.com";
