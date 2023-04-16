@@ -1,1 +1,1 @@
-export const Ws = 'https://ecerestbackend.onrender.com';
+export const Ws = 'http://localhost:3002';

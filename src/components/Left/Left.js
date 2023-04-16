@@ -3,14 +3,14 @@ import './Left.scss';
 import { useEffect } from 'react';
 
 
-const Left = ({ orders, setOrders, token}) => {
+const Left = ({ orders, setOrders, token,socket}) => {
     const inputRefs = {};
 
-    // useEffect(() => {
-    //     socket.on("addOrder",data=>{
-    //         setOrders(p=>[...p,data])
-    //     })
-    // }, []);
+    useEffect(() => {
+        socket.on("addOrder",data=>{
+            setOrders(p=>[...p,data])
+        })
+    }, []);
 
     const handleContol = async ({ id, status }) => {
         try {

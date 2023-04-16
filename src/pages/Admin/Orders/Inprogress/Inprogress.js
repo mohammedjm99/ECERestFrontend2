@@ -4,27 +4,27 @@ import { request } from '../../../../api/axiosMethods';
 import CircularProgress from '@mui/material/CircularProgress';
 import './Inprogress.scss';
 
-const Inprogress = ({ setNavbarIndex}) => {
+const Inprogress = ({ setNavbarIndex,socket}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [tablesWithOrders, setTablesWithOrders] = useState(null);
     const [total, setTotal] = useState(null);
 
-    // useEffect(() => {
-    //     socket.on("addOrder",data=>{
-    //         setTablesWithOrders(p => {
-    //             const newState = {
-    //               ...p,
-    //               [data.table._id]: {
-    //                 ...p[data.table._id],
-    //                 amount: p[data.table._id].amount + 1,
-    //               },
-    //             };
-    //             return newState;
-    //           });
-    //           setTotal(p=>p+1);
-    //     })
-    // }, []);
+    useEffect(() => {
+        socket.on("addOrder",data=>{
+            setTablesWithOrders(p => {
+                const newState = {
+                  ...p,
+                  [data.table._id]: {
+                    ...p[data.table._id],
+                    amount: p[data.table._id].amount + 1,
+                  },
+                };
+                return newState;
+              });
+              setTotal(p=>p+1);
+        })
+    }, []);
 
     useEffect(() => {
         setNavbarIndex(2);
