@@ -43,7 +43,7 @@ function Row(props) {
                 <TableCell component="th" scope="row" align="center">
                     {row.table.number}
                 </TableCell>
-                <TableCell align="center">{row.products.reduce((a,b)=>a+b.product.price*b.quantity,0)}</TableCell>
+                <TableCell align="center">{row.products.reduce((a,b)=>a+b.price*b.quantity,0)}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -63,11 +63,11 @@ function Row(props) {
                                 </TableHead>
                                 <TableBody>
                                     {row.products.map((el, i) => (
-                                        <TableRow key={el.product._id}>
-                                            <TableCell component="th" scope="row" align="center">{el.product.name}</TableCell>
+                                        <TableRow key={i}>
+                                            <TableCell component="th" scope="row" align="center">{el.name}</TableCell>
                                             <TableCell align="center">{el.quantity}</TableCell>
-                                            <TableCell align="center">{el.product.price}</TableCell>
-                                            <TableCell align="center">{el.product.price * el.quantity}</TableCell>
+                                            <TableCell align="center">{el.price}</TableCell>
+                                            <TableCell align="center">{el.price * el.quantity}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

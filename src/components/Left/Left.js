@@ -40,8 +40,8 @@ const Left = ({ orders, setOrders, token , socket}) => {
                     <div className="order" key={order._id}>
                         <h2>Table <span style={{ color: '#f54749' }}>#{order.table.number}</span></h2>
 
-                        {order.products.map(el => (
-                            <div className="food" key={el.product._id}><p>{el.product.name}<span>x{el.quantity}</span></p><hr /></div>
+                        {order.products.map((el,i) => (
+                            <div className="food" key={i}><p>{el.name}<span>x{el.quantity}</span></p><hr /></div>
                         ))}
 
                         {order.status === 0 ?
