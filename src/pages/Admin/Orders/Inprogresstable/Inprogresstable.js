@@ -12,7 +12,7 @@ const Inprogresstable = ({ setNavbarIndex }) => {
     const [handleError, setHandleError] = useState(false);
     const [error, setError] = useState(false);
     const [orders, setOrders] = useState(null);
-    const [tableNumber, setTableNumber] = useState(null);
+    const [tableNumber,setTableNumber] = useState(null);
     const { id } = useParams();
     const navigate = useNavigate();
     useEffect(() => {
@@ -38,7 +38,7 @@ const Inprogresstable = ({ setNavbarIndex }) => {
         return () => {
             controller.abort();
         };
-    }, [setNavbarIndex, id]);
+    }, []);
 
     const handleButton = (id) => {
         try {
@@ -60,6 +60,8 @@ const Inprogresstable = ({ setNavbarIndex }) => {
             console.log(e);
         }
     }
+
+    console.log(orders);
     return (
         <div className="inprogresstable">
             <h1 className='t'>orders in progress</h1>
@@ -82,12 +84,12 @@ const Inprogresstable = ({ setNavbarIndex }) => {
 
                             {order.msg && <p style={{ color: '#a0a0a0' }}>Msg: {order.msg}</p>}
 
-                            {order.products.map(el => (
-                                <div className="food" key={el.product._id}><p>{el.product.name} <span>${el.product.price}</span></p> <p>x{el.quantity}</p><hr /></div>
+                            {order.products.map((el,i) => (
+                                <div className="food" key={i}><p>{el.name} <span>${el.price}</span></p> <p>x{el.quantity}</p><hr /></div>
                             ))}
 
                             <div className="bottom">
-                                <div className="total">Total: <span>${order.products.reduce((a, b) => a + b.product.price * b.quantity, 0)}</span></div>
+                                <div className="total">Total: <span>${order.products.reduce((a, b) => a + b.price * b.quantity, 0)}</span></div>
                                 {order.status === 2 ?
                                     <button disabled={handleLoading}
                                         onClick={() => handleButton(order._id)}

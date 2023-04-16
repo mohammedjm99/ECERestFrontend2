@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import CircularProgress from '@mui/material/CircularProgress';
 import {Outlet} from 'react-router-dom';
 import jwtDecode from "jwt-decode";
+import Navbar from "../components/Navbar/Navbar";
 
 export const Requirechief = ({children,socket})=>{
     const [showChief,setShowChief] = useState(false);
@@ -46,7 +47,7 @@ export const Requirechief = ({children,socket})=>{
     )
 }
 
-export const Requireadmin = ({socket})=>{
+export const Requireadmin = ({socket,navbarIndex})=>{
     const [showAdmin,setShowAmin] = useState(false);
     const navigate = useNavigate();
     const token = Cookies.get('token');
@@ -82,6 +83,6 @@ export const Requireadmin = ({socket})=>{
         fetch();
     },[token,navigate]);
     return(
-        showAdmin ? <Outlet/> : <div style={{height:'100vh',width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}><CircularProgress/></div>
+        showAdmin ? <div style={{ display: 'flex' }}><Navbar navbarIndex={navbarIndex}/><Outlet/></div> : <div style={{height:'100vh',width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}><CircularProgress/></div>
     )
 }

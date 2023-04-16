@@ -1,1 +1,1 @@
-export const Ws = "https://ecerestsocketserver.onrender.com";
+export const Ws = 'https://ecerestbackend.onrender.com';
