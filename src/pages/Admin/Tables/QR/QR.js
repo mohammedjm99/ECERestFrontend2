@@ -65,13 +65,12 @@ const QR = ({ setNavbarIndex }) => {
                             <p>SSID: Mohammed</p>
                             <p>Password: 12344321</p>
                             <p>Login <ArrowDropDownIcon/></p>
-                            <QRCode value={`http://172.20.10.4:3000/login/${table.number}$${table.secret}`} />
+                            <QRCode value={`http://172.20.10.5:3000/login/${table.number}$${table.secret}`} />
                         </div>
-                        <button onClick={() => regenerate(table._id)}>regenerate</button>
-                        <ReactToPrint
-                            trigger={() => <button>print</button>}
-                            content={() => refs[table._id]}
-                        />
+                        <div className="buttons">
+                            <button onClick={() => regenerate(table._id)}>regenerate</button>
+                            <ReactToPrint trigger={() => <button>print</button>} content={() => refs[table._id]}/>
+                        </div>
                     </div>
                 ))}
             </div>}

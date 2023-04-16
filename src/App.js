@@ -5,33 +5,23 @@ import { useState } from "react";
 import Login from "./pages/Login/Login";
 import Chief from "./pages/Chief/Chief";
 import Createorders from './pages/Admin/Orders/Createorders/Createorders';
-import Navbar from "./components/Navbar/Navbar";
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import Inprogress from './pages/Admin/Orders/Inprogress/Inprogress'
 import Paid from "./pages/Admin/Orders/Paid/Paid";
-import Createtables from "./pages/Admin/Tables/Createtables/Createtables";
+import Addedittable from "./pages/Admin/Tables/Addedittable/Addedittable";
 import Vetables from "./pages/Admin/Tables/Vetables/Vetables";
 import QR from "./pages/Admin/Tables/QR/QR";
 import Veproducts from "./pages/Admin/Products/Veproducts/Veproducts";
-import Createproducts from './pages/Admin/Products/Createproducts/Createproducts'
-import Createusers from "./pages/Admin/Users/Createusers/Createusers";
-import Veusers from "./pages/Admin/Users/Veusers/Veusers";
+import Addeditproduct from './pages/Admin/Products/Addeditproduct/Addeditproduct';
 import Inprogresstable from './pages/Admin/Orders/Inprogresstable/Inprogresstable';
-import { Ws } from './api/socketLink';
-import io from 'socket.io-client';
-const socket = io(Ws);
+import Managers from './pages/Admin/Managers/Managers';
+// import { Ws } from './api/socketLink';
+// import io from 'socket.io-client';
+// const socket = io(Ws);
 
 const App = () => {
 
-  const [navbarIndex,setNavbarIndex] = useState(0);
-  const Withnavbar = ({children})=>{
-    return(
-      <div style={{display:'flex'}}>
-        <Navbar navbarIndex={navbarIndex}/>
-        {children}
-      </div>
-    )
-  }
+  const [navbarIndex, setNavbarIndex] = useState(undefined);
 
   return (
     <div className="App">
@@ -39,35 +29,34 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login />} />
 
-          <Route path='chief' element={<Requirechief socket={socket}><Chief socket={socket}/></Requirechief>} />
+          <Route path='chief' element={<Requirechief><Chief /></Requirechief>} />
 
-          <Route path="admin" element={<Requireadmin socket={socket}/>}>
-            <Route index element={<Withnavbar><Dashboard setNavbarIndex={setNavbarIndex}/></Withnavbar>} />
+          <Route path="admin" element={<Requireadmin navbarIndex={navbarIndex} />}>
+            <Route index element={<Dashboard setNavbarIndex={setNavbarIndex} />} />
 
             <Route path="orders">
-              <Route path="create" element={<Withnavbar><Createorders setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
+              <Route path="create" element={<Createorders setNavbarIndex={setNavbarIndex} />} />
               <Route path="inprogress">
-                <Route index element={<Withnavbar><Inprogress socket={socket} setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
-                <Route path=':id' element={<Withnavbar><Inprogresstable setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
+                <Route index element={<Inprogress setNavbarIndex={setNavbarIndex} />} />
+                <Route path=':id' element={<Inprogresstable setNavbarIndex={setNavbarIndex} />} />
               </Route>
-              <Route path="paid" element={<Withnavbar><Paid setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
+              <Route path="paid" element={<Paid setNavbarIndex={setNavbarIndex} />} />
             </Route>
 
             <Route path="tables">
-              <Route path="create" element={<Withnavbar><Createtables setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
-              <Route path="ve" element={<Withnavbar><Vetables setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
-              <Route path="qr" element={<Withnavbar><QR setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
+              <Route path="add" element={<Addedittable title={'add'} setNavbarIndex={setNavbarIndex} />} />
+              <Route path="ve" element={<Vetables setNavbarIndex={setNavbarIndex} />} />
+              <Route path="ve/:id" element={<Addedittable title={'edit'} setNavbarIndex={setNavbarIndex} />} />
+              <Route path="qr" element={<QR setNavbarIndex={setNavbarIndex} />} />
             </Route>
 
             <Route path="products">
-              <Route path="create" element={<Withnavbar><Createproducts setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
-              <Route path="ve" element={<Withnavbar><Veproducts setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
+              <Route path="add" element={<Addeditproduct title={'add'} setNavbarIndex={setNavbarIndex} />} />
+              <Route path="ve" element={<Veproducts setNavbarIndex={setNavbarIndex} />} />
+              <Route path="ve/:id" element={<Addeditproduct title={'edit'} setNavbarIndex={setNavbarIndex} />} />
             </Route>
 
-            <Route path="users">
-              <Route path="create" element={<Withnavbar><Createusers setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
-              <Route path="ve" element={<Withnavbar><Veusers setNavbarIndex={setNavbarIndex}/></Withnavbar>}/>
-            </Route>
+            <Route path="managers" element={<Managers setNavbarIndex={setNavbarIndex} />} />
 
           </Route>
 

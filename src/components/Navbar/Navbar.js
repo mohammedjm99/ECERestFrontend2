@@ -30,21 +30,20 @@ const Navbar = ({navbarIndex}) => {
 
                 <li>Tables</li>
                 <ul className='sub-list'>
-                    <li><Link to="/admin/tables/create" className={navbarIndex === 4 ? 'active' : ''}><AddBoxIcon className='icon'/>create</Link></li>
+                    <li><Link to="/admin/tables/add" className={navbarIndex === 4 ? 'active' : ''}><AddBoxIcon className='icon'/>Add</Link></li>
                     <li><Link to="/admin/tables/ve" className={navbarIndex === 5 ? 'active' : ''}><RateReviewIcon className='icon'/>view & edit</Link></li>
                     <li><Link to="/admin/tables/qr" className={navbarIndex === 6 ? 'active' : ''}><QrCodeScannerIcon className='icon'/>QR code</Link></li>
                 </ul>
 
                 <li>Products</li>
                 <ul className='sub-list'>
-                    <li><Link to="/admin/products/create" className={navbarIndex === 7 ? 'active' : ''}><AddBoxIcon className='icon'/>create</Link></li>
+                    <li><Link to="/admin/products/add" className={navbarIndex === 7 ? 'active' : ''}><AddBoxIcon className='icon'/>add</Link></li>
                     <li><Link to="/admin/products/ve" className={navbarIndex === 8 ? 'active' : ''}><RateReviewIcon className='icon'/>view & edit</Link></li>
                 </ul>
 
-                <li>Users</li>
+                <li>Managers</li>
                 <ul className='sub-list'>
-                    <li><Link to="/admin/users/create" className={navbarIndex === 9 ? 'active' : ''}><AddBoxIcon className='icon'/>create</Link></li>
-                    <li><Link to="/admin/users/ve" className={navbarIndex === 10 ? 'active' : ''}><RateReviewIcon className='icon'/>view & edit</Link></li>
+                    <li><Link to="/admin/managers" className={navbarIndex === 9 ? 'active' : ''}><AddBoxIcon className='icon'/>Add & View & Edit</Link></li>
                 </ul>
             </ul>
         </div>
