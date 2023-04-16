@@ -5,7 +5,6 @@ import { useState } from "react";
 import Login from "./pages/Login/Login";
 import Chief from "./pages/Chief/Chief";
 import Createorders from './pages/Admin/Orders/Createorders/Createorders';
-import Navbar from "./components/Navbar/Navbar";
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import Inprogress from './pages/Admin/Orders/Inprogress/Inprogress'
 import Paid from "./pages/Admin/Orders/Paid/Paid";
@@ -16,9 +15,15 @@ import Veproducts from "./pages/Admin/Products/Veproducts/Veproducts";
 import Addeditproduct from './pages/Admin/Products/Addeditproduct/Addeditproduct';
 import Inprogresstable from './pages/Admin/Orders/Inprogresstable/Inprogresstable';
 import Managers from './pages/Admin/Managers/Managers';
+<<<<<<< HEAD
 import { Ws } from './api/socketLink';
 import io from 'socket.io-client';
 const socket = io(Ws);
+=======
+// import { Ws } from './api/socketLink';
+// import io from 'socket.io-client';
+// const socket = io(Ws);
+>>>>>>> f0c3d51454af0a603879202753cbd5c1ac1e2882
 
 const App = () => {
 
@@ -30,15 +35,25 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login />} />
 
+<<<<<<< HEAD
           <Route path='chief' element={<Requirechief socket={socket}><Chief socket={socket} /></Requirechief>} />
 
           <Route path="admin" element={<Requireadmin navbarIndex={navbarIndex} socket={socket} />}>
+=======
+          <Route path='chief' element={<Requirechief><Chief /></Requirechief>} />
+
+          <Route path="admin" element={<Requireadmin navbarIndex={navbarIndex} />}>
+>>>>>>> f0c3d51454af0a603879202753cbd5c1ac1e2882
             <Route index element={<Dashboard setNavbarIndex={setNavbarIndex} />} />
 
             <Route path="orders">
               <Route path="create" element={<Createorders setNavbarIndex={setNavbarIndex} />} />
               <Route path="inprogress">
+<<<<<<< HEAD
                 <Route index element={<Inprogress socket={socket} setNavbarIndex={setNavbarIndex} />} />
+=======
+                <Route index element={<Inprogress setNavbarIndex={setNavbarIndex} />} />
+>>>>>>> f0c3d51454af0a603879202753cbd5c1ac1e2882
                 <Route path=':id' element={<Inprogresstable setNavbarIndex={setNavbarIndex} />} />
               </Route>
               <Route path="paid" element={<Paid setNavbarIndex={setNavbarIndex} />} />
