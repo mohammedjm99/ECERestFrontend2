@@ -1,5 +1,5 @@
 import './Right.scss';
-import { useState} from 'react';
+import { useEffect, useState} from 'react';
 
 const Right = ({tables}) => {
     const [activeTable,setActiveTable] = useState(null);
@@ -14,6 +14,10 @@ const Right = ({tables}) => {
     }
 
     // console.log(activeTable)
+
+    useEffect(()=>{
+        console.log('first');
+    },[])
 
     return (
         <div className='right'>

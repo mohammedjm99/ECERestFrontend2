@@ -1,88 +1,96 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {request} from '../api/axiosMethods';
 import Cookies from "js-cookie";
 import CircularProgress from '@mui/material/CircularProgress';
-import {Outlet} from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import jwtDecode from "jwt-decode";
 import Navbar from "../components/Navbar/Navbar";
+import Cashiernavbar from '../components/Cashiernavbar/Cashiernavbar'
 
-export const Requirechief = ({children,socket})=>{
-    const [showChief,setShowChief] = useState(false);
+
+export const Requirechief = ({ children, socket }) => {
     const navigate = useNavigate();
     const token = Cookies.get('token');
+    const [showCashier, setshowCashier] = useState(false);
 
-    useEffect(()=>{
-        if(showChief){
-            try{
-                const decoded = jwtDecode(token);
-                socket.emit("joinChief",decoded._id);
-            }catch(e){
-    
+    useEffect(() => {
+        try {
+            const decoded = jwtDecode(token);
+            if (decoded.rule === 'cashier') {
+                navigate('/orders/inprogress');
+                return;
             }
-    
-            return()=>{
-                socket.disconnect();
-            }
+            socket.emit("joinChief", decoded._id);
+            setshowCashier(true);
+        } catch (e) {
+            Cookies.remove('token');
+            navigate('/login');
         }
-    },[showChief])
 
-    useEffect(()=>{
-        const fetch = async()=>{
-            try{
-                await request.get('/auth/requirechief',{
-                    headers: { token: `Bearer ${token}` }
-                })
-                setShowChief(true);
-            }catch(e){
-                Cookies.remove('token');
-                setShowChief(false);
-                navigate('/');
-            }
+        return()=>{
+            socket.disconnect();
         }
-        fetch();
-    },[token,navigate]);
-    return(
-        showChief ? children : <div style={{height:'100vh',width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}><CircularProgress/></div>
+    }, []);
+    return (
+        showCashier ? children : <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></div>
     )
 }
 
-export const Requireadmin = ({socket,navbarIndex})=>{
-    const [showAdmin,setShowAmin] = useState(false);
+export const Requirecashier = ({ socket, navbarIndex }) => {
     const navigate = useNavigate();
     const token = Cookies.get('token');
+    const [requireCashier, setRequireCashier] = useState(false);
 
-    useEffect(()=>{
-        if(showAdmin){
-            try{
-                const decoded = jwtDecode(token);
-                socket.emit("joinAdmin",decoded._id);
-            }catch(e){
-    
+    useEffect(() => {
+        try {
+            const decoded = jwtDecode(token);
+            if (decoded.rule === 'chief') {
+                navigate('/chief');
+                return;
             }
-    
-            return()=>{
-                socket.disconnect();
-            }
+            socket.emit("joinCashier", decoded._id);
+            setRequireCashier(true);
+        } catch (e) {
+            Cookies.remove('token');
+            navigate('/login');
         }
-    },[showAdmin])
 
-    useEffect(()=>{
-        const fetch = async()=>{
-            try{
-                await request.get('/auth/requireadmin',{
-                    headers: { token: `Bearer ${token}` }
-                })
-                setShowAmin(true);
-            }catch(e){
-                Cookies.remove('token');
-                setShowAmin(false);
-                navigate('/');
-            }
+        return()=>{
+            socket.disconnect();
         }
-        fetch();
-    },[token,navigate]);
-    return(
-        showAdmin ? <div style={{ display: 'flex' }}><Navbar navbarIndex={navbarIndex}/><Outlet/></div> : <div style={{height:'100vh',width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}><CircularProgress/></div>
+    }, []);
+    return (
+        requireCashier ? <div style={{ display: 'flex',flexDirection:'column' }}><Cashiernavbar navbarIndex={navbarIndex} /><Outlet /></div> : <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></div>
+    )
+}
+
+export const Requireadmin = ({ socket, navbarIndex }) => {
+    const navigate = useNavigate();
+    const token = Cookies.get('token');
+    const [requireCashier, setrequireCashier] = useState(false);
+
+    useEffect(() => {
+        try {
+            const decoded = jwtDecode(token);
+            if (decoded.rule === 'chief') {
+                navigate('/chief');
+                return;
+            } else if (decoded.rule === 'cashier') {
+                navigate('cashier/orders/inprogress');
+                return;
+            }
+            socket.emit("joinAdmin", decoded._id);
+            setrequireCashier(true);
+        } catch (e) {
+            Cookies.remove('token');
+            navigate('/login');
+        }
+
+        return()=>{
+            socket.disconnect();
+        }
+    }, []);
+    return (
+        requireCashier ? <div style={{ display: 'flex' }}><Navbar navbarIndex={navbarIndex} /><Outlet /></div> : <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></div>
     )
 }

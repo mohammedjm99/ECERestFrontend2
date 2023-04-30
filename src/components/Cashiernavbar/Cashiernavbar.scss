@@ -1,0 +1,31 @@
+.cashiernavbar {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+
+    ul {
+        display: flex;
+        list-style: none;
+        gap: 25px;
+        justify-content: center;
+
+        li{
+            a {
+                text-decoration: none;
+                border-radius: 5px;
+                box-shadow: 0 0 5px #ccc;
+                padding: 10px 20px;
+                color: inherit;
+                transition: 0.3s;
+                font-size: 20px;
+
+                &.active,&:hover{
+                    background-color: #f54749;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}

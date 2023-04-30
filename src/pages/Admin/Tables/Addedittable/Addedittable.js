@@ -5,6 +5,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { CircularProgress } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { request } from '../../../../api/axiosMethods';
+import Cookies from 'js-cookie';
 
 
 
@@ -13,7 +14,7 @@ const Addedittable = ({ title, setNavbarIndex }) => {
 
     const numberRef = useRef(null);
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     const [table, setTable] = useState(null);
@@ -46,23 +47,55 @@ const Addedittable = ({ title, setNavbarIndex }) => {
         const signal = controller.signal;
         if (title === 'add') {
             setNavbarIndex(4);
-        } else if (title === 'edit') {
             const fetch = async () => {
                 try {
+                    const token = Cookies.get('token');
                     setLoading(true);
                     setError(false);
-                    const res = await request.get('/table/single/' + id, { signal });
-                    setNumber(res.data.number);
-                    setDistance(res.data.distance);
-                    setOldData(res.data);
+                    await request.get('/auth/requireadmin', {
+                        signal, headers: {
+                            token: 'Bearer ' + token
+                        }
+                    });
                     setLoading(false);
                 } catch (e) {
+                    if (e.response?.status === 403 || e.response?.status === 401) {
+                        Cookies.remove('token');
+                        navigate('/login');
+                        return;
+                    }
                     setError(true);
                     setLoading(false);
                 }
             }
             fetch();
+        } else if (title === 'edit') {
             setNavbarIndex(5);
+            const fetch = async () => {
+                try {
+                    const token = Cookies.get('token');
+                    setLoading(true);
+                    setError(false);
+                    const res = await request.get('/table/' + id, {
+                        signal, headers: {
+                            token: 'Bearer ' + token
+                        }
+                    });
+                    setNumber(res.data.number);
+                    setDistance(res.data.distance);
+                    setOldData(res.data);
+                    setLoading(false);
+                } catch (e) {
+                    if (e.response?.status === 403 || e.response?.status === 401) {
+                        Cookies.remove('token');
+                        navigate('/login');
+                        return;
+                    }
+                    setError(true);
+                    setLoading(false);
+                }
+            }
+            fetch();
         }
 
         return () => {
@@ -75,6 +108,7 @@ const Addedittable = ({ title, setNavbarIndex }) => {
         e.preventDefault();
         const fetch = async () => {
             try {
+                const token = Cookies.get('token');
                 setSLoading(true);
                 setSError(null);
                 if (!number || !distance) {
@@ -84,21 +118,34 @@ const Addedittable = ({ title, setNavbarIndex }) => {
                     return;
                 }
                 if (title === 'add') {
-                    await request.post('/table', { number, distance });
+                    await request.post('/table', { number, distance }, {
+                        headers: {
+                            token: 'Bearer ' + token
+                        }
+                    });
                     setSuccess('Table added successfully.');
                     setSLoading(false);
                     setDistance('');
                     setNumber('');
                     numberRef.current.focus();
-                }else if(title === 'edit'){
-                    const res = await request.put('/table/single/'+id,{number,distance});
+                } else if (title === 'edit') {
+                    const res = await request.put('/table/' + id, { number, distance }, {
+                        headers: {
+                            token: 'Bearer ' + token
+                        }
+                    });
                     setOldData(res.data);
                     setSuccess('Table updated successfully.');
                     setSLoading(false);
                 }
             } catch (e) {
+                if (e.response?.status === 403 || e.response?.status === 401) {
+                    Cookies.remove('token');
+                    navigate('/login');
+                    return;
+                }
                 setSuccess('');
-                setSError("Internal server error.");
+                setSError(e.response?.data || 'internal server error.');
                 setSLoading(false);
             }
         }
@@ -110,12 +157,12 @@ const Addedittable = ({ title, setNavbarIndex }) => {
             <h1>{title} table</h1>
             {loading ? <div className="loading"><CircularProgress /></div> :
                 <div className="form">
-                    {title === 'edit' && <div className="arrow" onClick={() => navigate('/admin/tables/ve')}><ArrowBackIosNewIcon /></div>}
+                    {title === 'edit' && <div className="arrow" onClick={() => navigate('/tables/ve')}><ArrowBackIosNewIcon /></div>}
                     <form onSubmit={handleSubmit} style={title === 'add' ? { marginTop: '50px' } : { marginTop: '20px' }}>
                         <label>
                             Number
                             <div className="input">
-                                <input type="number" onChange={(e) => setNumber(e.target.value)} placeholder='ex: 3' value={number} ref={numberRef}/>
+                                <input type="number" onChange={(e) => setNumber(e.target.value)} placeholder='ex: 3' value={number} ref={numberRef} />
                                 <CloseOutlinedIcon onClick={() => setNumber('')} style={{ cursor: 'pointer' }} />
                             </div>
                         </label>

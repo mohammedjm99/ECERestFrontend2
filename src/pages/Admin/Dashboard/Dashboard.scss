@@ -1,0 +1,112 @@
+.dashboard {
+    flex: 1;
+
+    h1 {
+        text-transform: capitalize;
+        height: 80px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #f54749;
+    }
+
+    .loading {
+        margin-top: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .error {
+        color: #f54749;
+        text-align: center;
+        margin-top: 60px;
+        font-size: 18px;
+    }
+
+    .wrapper {
+        padding: 0 30px;
+
+        .sections {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+
+            .section {
+                display: flex;
+                align-items: center;
+                padding: 15px;
+                border-radius: 10px;
+                gap: 15px;
+                box-shadow: 0 0 5px #ccc;
+                width: 260px;
+
+                .icon {
+                    background-color: #f54749;
+                    width: 60px;
+                    height: 60px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: #fff;
+                    border-radius: 50%;
+                }
+
+                div {
+                    &:last-child {
+                        h3 {
+                            text-transform: capitalize;
+                        }
+
+                        h2 {
+                            color: #b0b0b0;
+                        }
+
+                        display: flex;
+                        flex-direction: column;
+                        gap: 5px;
+                    }
+                }
+            }
+        }
+
+        .charts {
+            display: flex;
+            gap: 30px;
+            margin-top: 60px;
+
+            .one {
+                flex: 1 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                div {
+                    width: 60%;
+                    height: 60%;
+                    box-shadow: 0 0 10px #ccc;
+                    border-radius: 20px;
+                    display: flex;
+                    text-align: center;
+                    justify-content: center;
+                    padding: 15px;
+                    align-items: center;
+                    line-height: 40px;
+                    text-transform: capitalize;
+
+                    span {
+                        color: #f54749;
+                    }
+                }
+            }
+
+            .two {
+                flex: 2;
+                font-size: 18px;
+            }
+
+        }
+    }
+}

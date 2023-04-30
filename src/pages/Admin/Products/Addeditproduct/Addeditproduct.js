@@ -10,15 +10,16 @@ import { storage } from '../../../../api/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import Cookies from 'js-cookie';
 
 
 const Addeditproduct = ({ setNavbarIndex, title }) => {
 
     const nameRef = useRef(null);
-    const [imgKey,setImgKey] = useState(0);
-    
+    const [imgKey, setImgKey] = useState(0);
+
     const [categories, setCategories] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     const navigate = useNavigate();
@@ -44,7 +45,7 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
                 setIschanged(false);
             }
         }
-    }, [name, price, category, img,oldData.name,oldData.category,oldData.img,oldData.price]);
+    }, [name, price, category, img, oldData.name, oldData.category, oldData.img, oldData.price]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -53,12 +54,22 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
             setNavbarIndex(7);
             const fetch = async () => {
                 try {
+                    const token = Cookies.get('token');
                     setLoading(true);
                     setError(false);
-                    const res = await request.get('/product/categories', { signal });
+                    const res = await request.get('/product/c', {
+                        signal, headers: {
+                            token: 'Bearer ' + token
+                        }
+                    });
                     setCategories(res.data);
                     setLoading(false);
                 } catch (e) {
+                    if (e.response?.status === 403 || e.response?.status === 401) {
+                        Cookies.remove('token');
+                        navigate('/login');
+                        return;
+                    }
                     setError(true);
                     setLoading(false);
                 }
@@ -68,9 +79,14 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
             setNavbarIndex(8);
             const fetch = async () => {
                 try {
+                    const token = Cookies.get('token');
                     setLoading(true);
                     setError(false);
-                    const res = await request.get('/product/ve/' + id, { signal });
+                    const res = await request.get('/product/ve/' + id, {
+                        signal, headers: {
+                            token: 'Bearer ' + token
+                        }
+                    });
                     setCategories(res.data.categories);
                     setName(res.data.product.name);
                     setCategory(res.data.product.category);
@@ -79,9 +95,14 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
                     setOldData(res.data.product);
                     setLoading(false);
                 } catch (e) {
+                    if (e.response?.status === 403 || e.response?.status === 401) {
+                        Cookies.remove('token');
+                        navigate('/login');
+                        return;
+                    }
                     setError(true);
                     setLoading(false);
-                    navigate('/admin/products/ve');
+                    navigate('/products/ve');
                 }
             }
             fetch();
@@ -127,7 +148,10 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
                 price
 
             };
-            request.put('/product/' + id, data)
+            const token = Cookies.get('token');
+            request.put('/product/' + id, data,{headers:{
+                token:'Bearer '+token
+            }})
                 .then(() => {
                     setOldData(data)
                     setSuccess('product updated successfully!');
@@ -155,12 +179,15 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
                             price
 
                         };
+                        const token = Cookies.get('token');
                         if (title === 'add') {
-                            request.post('/product', data)
+                            request.post('/product', data,{headers:{
+                                token:'Bearer '+token
+                            }})
                                 .then(() => {
-                                    if(!categories.includes(category)) setCategories([...categories,category]);
+                                    if (!categories.includes(category)) setCategories([...categories, category]);
                                     setSuccess('product Added successfully!');
-                                    setImgKey(p=>p+1);
+                                    setImgKey(p => p + 1);
                                     setName('');
                                     setCategory('');
                                     setPrice('');
@@ -173,13 +200,15 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
                                     setSLoading(false);
                                 });
                         } else if (title === 'edit') {
-                            request.put('/product/' + id, data)
+                            request.put('/product/' + id, data,{headers:{
+                                token:'Bearer '+token
+                            }})
                                 .then(() => {
                                     setOldData(data);
                                     setSuccess('product updated successfully!');
                                     setSLoading(false);
                                 })
-                                .catch(() => {
+                                .catch((e) => {
                                     setSError("internal server error.");
                                     setSLoading(false);
                                 });
@@ -226,14 +255,15 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
     return (
         <div className="addeditproduct">
             <h1>{title} product</h1>
+            {error && <h3 className='ee'>Internal server error</h3>}
             {loading ? <div className="loading"><CircularProgress /></div> : categories &&
                 <div className="form">
-                    {title==='edit' && <div className="arrow" onClick={() => navigate('/admin/products/ve')}><ArrowBackIosNewIcon /></div>}
-                    <form onSubmit={handleSubmit} style={title==='add' ? {marginTop:'50px'} : {marginTop:'20px'}}>
+                    {title === 'edit' && <div className="arrow" onClick={() => navigate('/products/ve')}><ArrowBackIosNewIcon /></div>}
+                    <form onSubmit={handleSubmit} style={title === 'add' ? { marginTop: '50px' } : { marginTop: '20px' }}>
                         <label>
                             Name
                             <div className="input">
-                                <input type="text" onChange={(e) => setName(e.target.value)} placeholder='ex: papperoni pizza' value={name} ref={nameRef}/>
+                                <input type="text" onChange={(e) => setName(e.target.value)} placeholder='ex: papperoni pizza' value={name} ref={nameRef} />
                                 <CloseOutlinedIcon onClick={() => setName('')} style={{ cursor: 'pointer' }} />
                             </div>
                         </label>
@@ -257,7 +287,7 @@ const Addeditproduct = ({ setNavbarIndex, title }) => {
                             </div>
                         </label>
                         <label id='imgcontainer'>
-                            <input type="file" name='img' id='img' onChange={handleBrowseImg} key={imgKey}/>
+                            <input type="file" name='img' id='img' onChange={handleBrowseImg} key={imgKey} />
                             <label htmlFor="img" style={{ flexDirection: 'row', gap: '5px', alignItems: 'center', cursor: 'pointer' }}>Choose an image<FileUploadOutlinedIcon /></label>
                             {img ? <img src={typeof (img) === 'string' ? img : URL.createObjectURL(img)} alt="" id='browsedimg' /> : <ImageNotSupportedIcon />}
                         </label>

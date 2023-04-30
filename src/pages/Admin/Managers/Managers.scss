@@ -37,6 +37,7 @@
             height: -moz-fit-content;
             height: fit-content;
             gap: 15px;
+            width: 250px;
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -81,6 +82,10 @@
                 margin: 0 auto;
                 text-transform: capitalize;
 
+                &:disabled{
+                    cursor: wait;
+                }
+
                 &:hover {
                     background-color: rgb(0, 153, 204);
                     color: #fff;
@@ -89,8 +94,8 @@
 
             .cancel {
                 position: absolute;
-                top: 15px;
-                right: 15px;
+                top: 5px;
+                right: 5px;
                 background-color: #f54749;
                 color: #fff;
                 transition: 0.3s;
@@ -232,6 +237,10 @@
                     &:hover {
                         background-color: rgb(255, 87, 51);
                         color: #fff;
+                    }
+
+                    &:disabled{
+                        cursor: wait;
                     }
                 }
             }

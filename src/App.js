@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Requirechief, Requireadmin } from "./auth/Require";
+import { Requirechief, Requireadmin, Requirecashier } from "./auth/Require";
 import { useState } from "react";
 
 import Login from "./pages/Login/Login";
@@ -27,18 +27,18 @@ const App = () => {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
 
           <Route path='chief' element={<Requirechief socket={socket}><Chief socket={socket} /></Requirechief>} />
 
-          <Route path="admin" element={<Requireadmin navbarIndex={navbarIndex} socket={socket} />}>
-            <Route index element={<Dashboard setNavbarIndex={setNavbarIndex} />} />
+          <Route path="/" element={<Requireadmin navbarIndex={navbarIndex} socket={socket} />}>
+            <Route path="dashboard" element={<Dashboard setNavbarIndex={setNavbarIndex} />} />
 
             <Route path="orders">
-              <Route path="create" element={<Createorders setNavbarIndex={setNavbarIndex} />} />
+              <Route path="create" element={<Createorders setNavbarIndex={setNavbarIndex} socket={socket} />} />
               <Route path="inprogress">
                 <Route index element={<Inprogress socket={socket} setNavbarIndex={setNavbarIndex} />} />
-                <Route path=':id' element={<Inprogresstable setNavbarIndex={setNavbarIndex} />} />
+                <Route path=':id' element={<Inprogresstable setNavbarIndex={setNavbarIndex} socket={socket} />} />
               </Route>
               <Route path="paid" element={<Paid setNavbarIndex={setNavbarIndex} />} />
             </Route>
@@ -57,6 +57,21 @@ const App = () => {
             </Route>
 
             <Route path="managers" element={<Managers setNavbarIndex={setNavbarIndex} />} />
+
+          </Route>
+
+          <Route path="/cashier" element={<Requirecashier navbarIndex={navbarIndex} socket={socket} />}>
+            <Route path="orders">
+              <Route path="create" element={<Createorders setNavbarIndex={setNavbarIndex} socket={socket} />} />
+              <Route path="inprogress">
+                <Route index element={<Inprogress socket={socket} setNavbarIndex={setNavbarIndex} />} />
+                <Route path=':id' element={<Inprogresstable setNavbarIndex={setNavbarIndex} socket={socket} />} />
+              </Route>
+            </Route>
+
+            <Route path="tables">
+              <Route path="qr" element={<QR setNavbarIndex={setNavbarIndex} />} />
+            </Route>
 
           </Route>
 

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import {useNavigate} from 'react-router-dom';
+import Cookies from 'js-cookie';
 import './Paid.scss';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -41,9 +43,9 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row" align="center">
-                    {row.table.number}
+                    {row.table.number === 0 ? 'Outside' : `Table ${row.table.number}`}
                 </TableCell>
-                <TableCell align="center">{row.products.reduce((a,b)=>a+b.price*b.quantity,0)}</TableCell>
+                <TableCell align="center">{row.products.reduce((a, b) => a + b.price * b.quantity, 0)}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -81,9 +83,11 @@ function Row(props) {
 }
 
 const Paid = ({ setNavbarIndex }) => {
+    const navigate = useNavigate();
     const [rows, setRows] = useState(null);
-    const [loading,setLoading] = useState(false);
-    const [error,setError] = useState(false);
+    const [total, setTotal] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
 
     useEffect(() => {
@@ -91,15 +95,31 @@ const Paid = ({ setNavbarIndex }) => {
         const controller = new AbortController();
         const signal = controller.signal;
 
-        const fetch = async()=>{
-            try{
+        const fetch = async () => {
+            try {
+                const token = Cookies.get('token');
                 setLoading(true);
                 setError(false);
                 setPage(0);
-                const res = await request.get(`/order/admin/paid/${selectedDate['$y']}-${selectedDate['$M'] + 1}-${selectedDate['$D']}`,{signal});
+                const res = await request.get(`/order/admin/paid/${selectedDate['$d']}`, { signal,headers:{
+                    token:'Bearer '+token
+                } });
                 setRows(res.data);
+
+                const totalPrice = res.data.reduce((accumulator, order) => {
+                    const orderTotalPrice = order.products.reduce((productAccumulator, product) => {
+                        return productAccumulator + (product.price * product.quantity);
+                    }, 0);
+                    return accumulator + orderTotalPrice;
+                }, 0);
+                setTotal(totalPrice);
                 setLoading(false);
-            }catch(e){
+            } catch (e) {
+                if (e.response?.status === 403 || e.response?.status === 401) {
+                    Cookies.remove('token');
+                    navigate('/login');
+                    return;
+                }
                 setError(true);
                 setLoading(false);
             }
@@ -109,9 +129,7 @@ const Paid = ({ setNavbarIndex }) => {
         return () => {
             controller.abort();
         };
-    }, [setNavbarIndex,selectedDate]);
-
-
+    }, [setNavbarIndex, selectedDate]);
     const handleDateChange = (date) => {
         setSelectedDate(date);
     }
@@ -131,7 +149,6 @@ const Paid = ({ setNavbarIndex }) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
     return (
         <div className="paid">
             <h1 className='t'>Paid Orders</h1>
@@ -141,35 +158,40 @@ const Paid = ({ setNavbarIndex }) => {
                 </div>
             </LocalizationProvider>
 
-            {loading ? <div className='loading'><CircularProgress/></div> : rows && (rows.length===0 ? <p className='empty'>No Paid Orders At This Date</p> 
-            : 
-            <div className="table">
-                <TableContainer component={Paper}>
-                    <Table aria-label="collapsible table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell />
-                                <TableCell align="center">Table Number</TableCell>
-                                <TableCell align="center">Order Price&nbsp;($)</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {currentRows.map((row) => (
-                                <Row key={row._id} row={row} />
-                            ))}
-                        </TableBody>
-                    </Table>
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={rows.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </TableContainer>
-            </div>)}
+            {error && <h3 className='ee'>Internal server error</h3>}
+
+            {loading ? <div className='loading'><CircularProgress /></div> : rows && (rows.length === 0 ? <p className='empty'>No Paid Orders At This Date</p>
+                :
+                <div className="wrapper">
+                    <h2>total income: <span>${total}</span></h2>
+                    <div className="table">
+                        <TableContainer component={Paper}>
+                            <Table aria-label="collapsible table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell />
+                                        <TableCell align="center">Order For</TableCell>
+                                        <TableCell align="center">Order Price&nbsp;($)</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {currentRows.map((row) => (
+                                        <Row key={row._id} row={row} />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                component="div"
+                                count={rows.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        </TableContainer>
+                    </div>
+                </div>)}
         </div>
     )
 }

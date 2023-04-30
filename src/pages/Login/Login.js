@@ -4,6 +4,7 @@ import jwt_decode from "jwt-decode";
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 const Login = ()=>{
     const token = Cookies.get('token');
@@ -12,14 +13,18 @@ const Login = ()=>{
     const [loading,setLoading] = useState(false);
     useEffect(()=>{
         if(token){
-            const decodedToken = jwt_decode(token);
-            navigate('/'+decodedToken.rule);
+            try{
+                const decodedToken = jwt_decode(token);
+                decodedToken.rule==='chief' ? navigate('/chief') : decodedToken.rule==='cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
+            }catch(e){
+                Cookies.remove('token');
+            }
         }
     },[token,navigate])
     const handleSubmit = async(e)=>{
         e.preventDefault();
         try{
-            setError(null);
+            // setError(null);
             setLoading(true);
             const res = await request.post('/manager/login',{
                 username: e.target.username.value,
@@ -28,10 +33,10 @@ const Login = ()=>{
             const decodedToken = jwt_decode(res.data);
             Cookies.set('token',res.data,{expires:1});
             setLoading(false);
-            navigate('/'+decodedToken.rule);
+            decodedToken.rule==='chief' ? navigate('/chief') : decodedToken.rule==='cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
         }catch(e){
             setLoading(false);
-            setError(e.message);
+            setError(e.response.data);
         }
     }
 
@@ -39,8 +44,8 @@ const Login = ()=>{
         <div className="login">
             <form onSubmit={handleSubmit}>
                 <input type="text" name="username" placeholder="Username..."/>
-                <input type="text" name="password" placeholder="Password..."/>
-                <button>Login</button>
+                <input type="password" name="password" placeholder="Password..."/>
+                <button disabled={loading}>{loading && <CircularProgress color='inherit' style={{height:'20px',width:'20px'}}/>} Login</button>
             </form>
             <div className="error">{error}</div>
         </div>
