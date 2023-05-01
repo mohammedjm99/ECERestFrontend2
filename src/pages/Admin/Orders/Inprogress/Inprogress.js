@@ -16,7 +16,7 @@ const Inprogress = ({ setNavbarIndex,socket}) => {
 
     useEffect(() => {
         socket.on("addOrder",data=>{
-            setTablesWithOrders(p => {
+            tablesWithOrders && setTablesWithOrders(p => {
                 const newState = {
                   ...p,
                   [data.table._id]: {

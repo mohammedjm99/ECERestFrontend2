@@ -82,12 +82,12 @@ const Inprogresstable = ({ setNavbarIndex, socket }) => {
     }
     useEffect(() => {
         socket.on('changeStatus', data => {
-            if (data.table._id === id) {
+            if (data.table._id === id && orders) {
                 setOrders(prevOrders => prevOrders.map(order => order._id === data._id ? data : order));
             }
         });
         socket.on("addOrder", data => {
-            if (data.table._id === id) {
+            if (data.table._id === id && orders) {
                 setOrders(p => [...p, data]);
             }
         });
@@ -114,7 +114,7 @@ const Inprogresstable = ({ setNavbarIndex, socket }) => {
                 <p className='empty'>No Orders</p>
                 :
                 <div className="orders">
-                    {orders.map(order => (
+                    {orders && orders.map(order => (
                         <div className="order" key={order._id}>
                             {order.status === 0 ? <h2 className="status" style={{ color: '#F29339' }}>pending</h2> :
                                 order.status === 1 ? <h2 className="status" style={{ color: '#007E33' }}>accepted</h2> :

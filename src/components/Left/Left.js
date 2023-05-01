@@ -79,7 +79,7 @@ const Order = ({ order, orders, setOrders, socket }) => {
 const Left = ({ orders, setOrders, socket }) => {
 
     useEffect(() => {
-        socket.on("addOrder", data => {
+        orders && socket.on("addOrder", data => {
             setOrders(p => [...p, data])
         });
     }, []);
