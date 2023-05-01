@@ -45,7 +45,7 @@ export const Requirecashier = ({ socket, navbarIndex }) => {
         try {
             const decoded = jwtDecode(token);
             if (decoded.rule === 'chief') {
-                navigate('/chief');
+                navigate('/chef');
                 return;
             }
             socket.emit("joinCashier", decoded._id);
@@ -72,7 +72,7 @@ export const Requireadmin = ({ socket, navbarIndex }) => {
     useEffect(() => {
         try {
             const decoded = jwtDecode(token);
-            if (decoded.rule === 'chief') {
+            if (decoded.rule === 'chef') {
                 navigate('/chief');
                 return;
             } else if (decoded.rule === 'cashier') {

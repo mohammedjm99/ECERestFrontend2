@@ -5,6 +5,12 @@
     padding: 10px 0;
     box-sizing: border-box;
 
+    .error{
+        padding: 10px;
+        color: #f54749;
+        text-align: center;
+    }
+
     .logo {
         display: flex;
         flex-direction: column;
@@ -58,6 +64,12 @@
             background-color: initial;
             color: #f54749;
             cursor: pointer;
+            transition: 0.5s;
+
+            &:disabled{
+                border-color: #a0a0a0;
+                color: #a0a0a0;
+            }
         }
     }
 

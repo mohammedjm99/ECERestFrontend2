@@ -1,16 +1,18 @@
-import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database";
+import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCnvLAi4N25DgIULsBM7HQOWWIcGRih8u8",
-  authDomain: "ecerest-2b7fc.firebaseapp.com",
-  projectId: "ecerest-2b7fc",
-  storageBucket: "ecerest-2b7fc.appspot.com",
-  messagingSenderId: "192692457825",
-  appId: "1:192692457825:web:29f262488ded232433f520",
-  measurementId: "G-FNMQXYEJN5"
+  apiKey: "AIzaSyA42p9S0KImwKKVMLsW6u60HiDrDoeM_94",
+  authDomain: "ece-rest.firebaseapp.com",
+  projectId: "ece-rest",
+  storageBucket: "ece-rest.appspot.com",
+  messagingSenderId: "746517743742",
+  appId: "1:746517743742:web:32f717f81cdfe5132eb02f",
+  measurementId: "G-4F845P4STT"
 };
 
-
 const app = initializeApp(firebaseConfig);
+
 export const storage = getStorage(app);
+export const database = getDatabase();

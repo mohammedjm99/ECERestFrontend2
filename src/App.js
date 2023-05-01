@@ -29,7 +29,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
 
-          <Route path='chief' element={<Requirechief socket={socket}><Chief socket={socket} /></Requirechief>} />
+          <Route path='chef' element={<Requirechief socket={socket}><Chief socket={socket} /></Requirechief>} />
 
           <Route path="/" element={<Requireadmin navbarIndex={navbarIndex} socket={socket} />}>
             <Route path="dashboard" element={<Dashboard setNavbarIndex={setNavbarIndex} />} />

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Managers.scss';
 import { CircularProgress } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -115,7 +115,7 @@ const Manager = ({ i, manager, setManagers, managers, setEditError, setEditLoadi
                     </div>
                     <select value={rule} onChange={(e) => setrule(e.target.value)}>
                         <option value="cashier">Cashier</option>
-                        <option value="chief">Chief</option>
+                        <option value="chief">Chef</option>
                     </select>
                     <button className='edit' disabled={!isChanged || editLoading} onClick={handleEdit}>Edit</button>
                     <button disabled={deleteLoading} className='delete' onClick={handleDelete}>Delete</button>
@@ -257,7 +257,7 @@ const Managers = ({ setNavbarIndex }) => {
                                 <select defaultValue="f" name='rule'>
                                     <option disabled value={'f'}>Select</option>
                                     <option value="cashier">Cashier</option>
-                                    <option value="chief">Chief</option>
+                                    <option value="chief">Chef</option>
                                 </select>
                             </label>
                             <button disabled={addLoading}>add</button>
@@ -269,7 +269,7 @@ const Managers = ({ setNavbarIndex }) => {
                         <div className="headings">
                             <h3>username</h3>
                             <h3>password</h3>
-                            <h3>rule</h3>
+                            <h3>role</h3>
                         </div>
                         {managers.map((manager, i) => (
                             <Manager key={manager._id} i={i} manager={manager} setManagers={setManagers} managers={managers} editLoading={editLoading} setEditError={setEditError} setEditLoading={setEditLoading} setEditSuccess={setEditSuccess} />

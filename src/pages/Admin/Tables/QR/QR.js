@@ -106,7 +106,7 @@ const QR = ({ setNavbarIndex }) => {
                                     <p>SSID: Mohammed</p>
                                     <p>Password: 12344321</p>
                                     <p>Login <ArrowDropDownIcon /></p>
-                                    <QRCode value={`http://172.20.10.5:3000/login/${table.number}$${table.secret}`} />
+                                    <QRCode value={`https://ecerest.onrender.com/login/${table.number}$${table.secret}`} />
                                 </div>
                                 <div className="buttons">
                                     <button disabled={clickLoading} onClick={() => regenerate(table._id)}>regenerate</button>

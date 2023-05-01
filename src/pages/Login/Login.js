@@ -15,7 +15,7 @@ const Login = ()=>{
         if(token){
             try{
                 const decodedToken = jwt_decode(token);
-                decodedToken.rule==='chief' ? navigate('/chief') : decodedToken.rule==='cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
+                decodedToken.rule==='chief' ? navigate('/chef') : decodedToken.rule==='cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
             }catch(e){
                 Cookies.remove('token');
             }
@@ -33,7 +33,7 @@ const Login = ()=>{
             const decodedToken = jwt_decode(res.data);
             Cookies.set('token',res.data,{expires:1});
             setLoading(false);
-            decodedToken.rule==='chief' ? navigate('/chief') : decodedToken.rule==='cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
+            decodedToken.rule==='chief' ? navigate('/chef') : decodedToken.rule==='cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
         }catch(e){
             setLoading(false);
             setError(e.response.data);
