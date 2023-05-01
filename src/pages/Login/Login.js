@@ -33,7 +33,7 @@ const Login = ()=>{
             const decodedToken = jwt_decode(res.data);
             Cookies.set('token',res.data,{expires:1});
             setLoading(false);
-            decodedToken.rule==='chief' ? navigate('/chef') : decodedToken.rule==='cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
+            decodedToken.rule==='chief' ? window.location.pathname='chef' : decodedToken.rule==='cashier' ? window.location.pathname='/cashier/orders/inprogress' : window.location.pathname='/dashboard';
         }catch(e){
             setLoading(false);
             setError(e.response.data);

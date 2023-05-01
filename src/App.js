@@ -30,7 +30,7 @@ const App = () => {
       try {
         const token = Cookies.get('token');
         const decodedToken = jwt_decode(token);
-        decodedToken.rule === 'chief' ? navigate('/chef') : decodedToken.rule === 'cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
+        decodedToken.rule === 'chief' ? navigate('/chef') : decodedToken.rule === 'cashier' ? navigate('/cashier/orders/inprogress') : navigate('/dashboard');
       } catch (e) {
         Cookies.remove('token');
         navigate('/login');

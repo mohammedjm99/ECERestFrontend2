@@ -17,7 +17,7 @@ export const Requirechief = ({ children, socket }) => {
         try {
             const decoded = jwtDecode(token);
             if (decoded.rule === 'cashier') {
-                navigate('/orders/inprogress');
+                navigate('cashier/orders/inprogress');
                 return;
             }
             socket.emit("joinChief", decoded._id);
@@ -67,7 +67,7 @@ export const Requirecashier = ({ socket, navbarIndex }) => {
 export const Requireadmin = ({ socket, navbarIndex }) => {
     const navigate = useNavigate();
     const token = Cookies.get('token');
-    const [requireCashier, setrequireCashier] = useState(false);
+    const [requireAdmin, setRequireAdmin] = useState(false);
 
     useEffect(() => {
         try {
@@ -81,7 +81,7 @@ export const Requireadmin = ({ socket, navbarIndex }) => {
             }
             if(window.location.pathname === '/') navigate('/dashboard');
             socket.emit("joinAdmin", decoded._id);
-            setrequireCashier(true);
+            setRequireAdmin(true);
         } catch (e) {
             Cookies.remove('token');
             navigate('/login');
@@ -92,6 +92,6 @@ export const Requireadmin = ({ socket, navbarIndex }) => {
         }
     }, []);
     return (
-        requireCashier ? <div style={{ display: 'flex' }}><Navbar navbarIndex={navbarIndex} /><Outlet /></div> : <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></div>
+        requireAdmin ? <div style={{ display: 'flex' }}><Navbar navbarIndex={navbarIndex} /><Outlet /></div> : <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></div>
     )
 }
