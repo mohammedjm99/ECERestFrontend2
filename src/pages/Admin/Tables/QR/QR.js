@@ -98,7 +98,7 @@ const QR = ({ setNavbarIndex }) => {
             {loading ? <div className="loading"><CircularProgress /></div> : tables &&
                 <div className="tables">
                     {tables.length === 0 ? <h1 style={{ marginTop: '60px', color: 'rgb(255, 87, 51)' }}>no tables.</h1>
-                        : tables.map(table => (
+                        : tables && tables.map(table => (
                             <div className="table" key={table._id}>
                                 <div className="wrapper" ref={(ref) => refs[table._id] = ref}>
                                     <h2>table number {table.number}</h2>

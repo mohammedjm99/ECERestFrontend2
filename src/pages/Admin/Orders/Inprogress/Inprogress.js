@@ -29,7 +29,23 @@ const Inprogress = ({ setNavbarIndex, socket }) => {
                 }
             });
             setTotal(p => p + 1);
-        })
+        });
+
+        socket.on("removeOrder", data => {
+            setTablesWithOrders(p => {
+                if(p){
+                    const newState = {
+                        ...p,
+                        [data.table]: {
+                            ...p[data.table],
+                            amount: p[data.table].amount-1,
+                        },
+                    };
+                    return newState;
+                }
+            });
+            setTotal(p => p - 1);
+        });
     }, []);
 
     useEffect(() => {

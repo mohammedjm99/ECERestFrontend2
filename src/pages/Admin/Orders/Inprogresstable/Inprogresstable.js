@@ -54,7 +54,7 @@ const Inprogresstable = ({ setNavbarIndex, socket }) => {
         };
     }, []);
 
-    const handleButton = (id) => {
+    const handleButton = ({id,table}) => {
         const fetch = async () => {
             try {
                 const token = Cookies.get('token');
@@ -66,6 +66,7 @@ const Inprogresstable = ({ setNavbarIndex, socket }) => {
                     }
                 });
                 const newOrders = orders.filter(order => order._id !== id);
+                socket.emit("removeOrder",{id,table});
                 setOrders(newOrders);
                 setHandleLoading(false);
             } catch (e) {
@@ -89,6 +90,14 @@ const Inprogresstable = ({ setNavbarIndex, socket }) => {
         socket.on("addOrder", data => {
             if (data.table._id === id) {
                 setOrders(p => p && [...p, data]);
+            }
+        });
+        socket.on('removeOrder', data => {
+            try{
+                if(id===data.table){
+                    setOrders(prevOrders => prevOrders && prevOrders.filter(order => order._id !== data.id ));
+                }
+            }catch(e){
             }
         });
     }, []);
@@ -132,13 +141,13 @@ const Inprogresstable = ({ setNavbarIndex, socket }) => {
                                 <div className="total">Total: <span>${order.products.reduce((a, b) => a + b.price * b.quantity, 0)}</span></div>
                                 {canEdit && order.status === 2 ?
                                     <button disabled={handleLoading}
-                                        onClick={() => handleButton(order._id)}
+                                        onClick={() => handleButton({id:order._id,table:order.table._id})}
                                         onMouseOver={(e) => { e.target.style.backgroundColor = '#0099CC'; e.target.style.color = '#fff'; }}
                                         onMouseOut={(e) => { e.target.style.backgroundColor = 'initial'; e.target.style.color = '#0099CC'; }}
                                         style={{ color: '#0099CC', borderColor: '#0099CC' }}>paid</button> :
                                     canEdit && order.status === 3 ?
                                         <button disabled={handleLoading}
-                                            onClick={() => handleButton(order._id)}
+                                            onClick={() => handleButton({id:order._id,table:order.table._id})}
                                             onMouseOver={(e) => { e.target.style.backgroundColor = '#FF5733'; e.target.style.color = '#fff'; }}
                                             onMouseOut={(e) => { e.target.style.backgroundColor = 'initial'; e.target.style.color = '#FF5733'; }}
                                             style={{ color: '#FF5733', borderColor: '#FF5733' }}>checked</button> :
