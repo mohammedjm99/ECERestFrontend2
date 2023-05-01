@@ -82,13 +82,13 @@ const Inprogresstable = ({ setNavbarIndex, socket }) => {
     }
     useEffect(() => {
         socket.on('changeStatus', data => {
-            if (data.table._id === id && orders) {
-                setOrders(prevOrders => prevOrders.map(order => order._id === data._id ? data : order));
+            if (data.table._id === id) {
+                setOrders(prevOrders => prevOrders && prevOrders.map(order => order._id === data._id ? data : order));
             }
         });
         socket.on("addOrder", data => {
-            if (data.table._id === id && orders) {
-                setOrders(p => [...p, data]);
+            if (data.table._id === id) {
+                setOrders(p => p && [...p, data]);
             }
         });
     }, []);
