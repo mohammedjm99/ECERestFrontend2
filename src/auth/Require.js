@@ -72,13 +72,14 @@ export const Requireadmin = ({ socket, navbarIndex }) => {
     useEffect(() => {
         try {
             const decoded = jwtDecode(token);
-            if (decoded.rule === 'chef') {
-                navigate('/chief');
+            if (decoded.rule === 'chief') {
+                navigate('/chef');
                 return;
             } else if (decoded.rule === 'cashier') {
                 navigate('cashier/orders/inprogress');
                 return;
             }
+            if(window.location.pathname === '/') navigate('/dashboard');
             socket.emit("joinAdmin", decoded._id);
             setrequireCashier(true);
         } catch (e) {

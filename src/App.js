@@ -1,6 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { Requirechief, Requireadmin, Requirecashier } from "./auth/Require";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import jwt_decode from "jwt-decode";
 
 import Login from "./pages/Login/Login";
 import Chief from "./pages/Chief/Chief";
@@ -15,11 +16,30 @@ import Veproducts from "./pages/Admin/Products/Veproducts/Veproducts";
 import Addeditproduct from './pages/Admin/Products/Addeditproduct/Addeditproduct';
 import Inprogresstable from './pages/Admin/Orders/Inprogresstable/Inprogresstable';
 import Managers from './pages/Admin/Managers/Managers';
+
 import { Ws } from './api/socketLink';
 import io from 'socket.io-client';
+import Cookies from 'js-cookie';
 const socket = io(Ws);
 
 const App = () => {
+
+  const Redirect = () => {
+    const navigate = useNavigate();
+    useEffect(() => {
+      try {
+        const token = Cookies.get('token');
+        const decodedToken = jwt_decode(token);
+        decodedToken.rule === 'chief' ? navigate('/chef') : decodedToken.rule === 'cashier' ? navigate('/orders/inprogress') : navigate('/dashboard');
+      } catch (e) {
+        Cookies.remove('token');
+        navigate('/login');
+      }
+    }, [])
+    return (
+      <></>
+    )
+  }
 
   const [navbarIndex, setNavbarIndex] = useState(undefined);
 
@@ -31,7 +51,8 @@ const App = () => {
 
           <Route path='chef' element={<Requirechief socket={socket}><Chief socket={socket} /></Requirechief>} />
 
-          <Route path="/" element={<Requireadmin navbarIndex={navbarIndex} socket={socket} />}>
+          <Route path='/' element={<Requireadmin navbarIndex={navbarIndex} socket={socket} />}>
+            <Route path="*" element={<Redirect />} />
             <Route path="dashboard" element={<Dashboard setNavbarIndex={setNavbarIndex} />} />
 
             <Route path="orders">
@@ -72,10 +93,9 @@ const App = () => {
             <Route path="tables">
               <Route path="qr" element={<QR setNavbarIndex={setNavbarIndex} />} />
             </Route>
-
           </Route>
 
-          <Route path='/*' />
+          <Route path="*" element={<Redirect />} />
         </Routes>
       </Router>
     </div>
