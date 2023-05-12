@@ -8,10 +8,10 @@ import Navbar from "../components/Navbar/Navbar";
 import Cashiernavbar from '../components/Cashiernavbar/Cashiernavbar'
 
 
-export const Requirechief = ({ children, socket }) => {
+export const Requirechef = ({ children, socket }) => {
     const navigate = useNavigate();
     const token = Cookies.get('token');
-    const [showCashier, setshowCashier] = useState(false);
+    const [showChef, setShowChef] = useState(false);
 
     useEffect(() => {
         try {
@@ -20,8 +20,8 @@ export const Requirechief = ({ children, socket }) => {
                 navigate('cashier/orders/inprogress');
                 return;
             }
-            socket.emit("joinChief", decoded._id);
-            setshowCashier(true);
+            socket.emit("joinChef", decoded._id);
+            setShowChef(true);
         } catch (e) {
             Cookies.remove('token');
             navigate('/login');
@@ -32,7 +32,7 @@ export const Requirechief = ({ children, socket }) => {
         }
     }, []);
     return (
-        showCashier ? children : <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></div>
+        showChef ? children : <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></div>
     )
 }
 
@@ -44,7 +44,7 @@ export const Requirecashier = ({ socket, navbarIndex }) => {
     useEffect(() => {
         try {
             const decoded = jwtDecode(token);
-            if (decoded.rule === 'chief') {
+            if (decoded.rule === 'chef') {
                 navigate('/chef');
                 return;
             }
@@ -72,7 +72,7 @@ export const Requireadmin = ({ socket, navbarIndex }) => {
     useEffect(() => {
         try {
             const decoded = jwtDecode(token);
-            if (decoded.rule === 'chief') {
+            if (decoded.rule === 'chef') {
                 navigate('/chef');
                 return;
             } else if (decoded.rule === 'cashier') {

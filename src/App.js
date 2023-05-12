@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import { Requirechief, Requireadmin, Requirecashier } from "./auth/Require";
+import { Requirechef, Requireadmin, Requirecashier } from "./auth/Require";
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 
 import Login from "./pages/Login/Login";
-import Chief from "./pages/Chief/Chief";
+import Chef from "./pages/Chef/Chef";
 import Createorders from './pages/Admin/Orders/Createorders/Createorders';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import Inprogress from './pages/Admin/Orders/Inprogress/Inprogress'
@@ -30,7 +30,7 @@ const App = () => {
       try {
         const token = Cookies.get('token');
         const decodedToken = jwt_decode(token);
-        decodedToken.rule === 'chief' ? navigate('/chef') : decodedToken.rule === 'cashier' ? navigate('/cashier/orders/inprogress') : navigate('/dashboard');
+        decodedToken.rule === 'chef' ? navigate('/chef') : decodedToken.rule === 'cashier' ? navigate('/cashier/orders/inprogress') : navigate('/dashboard');
       } catch (e) {
         Cookies.remove('token');
         navigate('/login');
@@ -49,7 +49,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
 
-          <Route path='chef' element={<Requirechief socket={socket}><Chief socket={socket} /></Requirechief>} />
+          <Route path='chef' element={<Requirechef socket={socket}><Chef socket={socket} /></Requirechef>} />
 
           <Route path='/' element={<Requireadmin navbarIndex={navbarIndex} socket={socket} />}>
             <Route path="*" element={<Redirect />} />

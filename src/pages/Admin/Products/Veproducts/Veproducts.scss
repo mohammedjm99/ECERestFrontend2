@@ -126,11 +126,45 @@
 
             }
 
+            .visibility {
+                width: fit-content;
+                border: 2px solid;
+                margin: 5px 0 10px 10px;
+                border-radius: 5px;
+                background-color: initial;
+                user-select: none;
+                cursor: pointer;
+                transition: 0.3s;
+
+                &:disabled {
+                    cursor: wait;
+                }
+            }
+
+            .hide{
+                border-color: #a0a0a0;
+                color: #a0a0a0;
+
+                &:hover{
+                    border-color: #000;
+                    color: #000;
+                }
+            }
+
+            .show{
+                border-color: rgb(0, 153, 204);
+                color: rgb(0, 153, 204);
+
+                &:hover{
+                    background-color: rgb(0, 153, 204);
+                    color: #fff;
+                }
+            }
+
             .buttons {
                 padding: 0 10px;
                 display: flex;
                 gap: 10px;
-                margin-bottom: 10px;
                 margin-top: 7px;
 
                 button {

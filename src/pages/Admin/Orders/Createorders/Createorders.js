@@ -160,7 +160,7 @@ const Createorders = ({ setNavbarIndex, socket }) => {
                             :
                             <div className="products">
                                 {filteredProducts && filteredProducts.map(product => (
-                                    <div className="product" key={product._id}>
+                                    <div className="product" key={product._id} style={product.isVisible?{opacity:1}:{opacity:0.7}}>
                                         <div className="img">
                                             <img src={product.img} alt="" />
                                         </div>
@@ -169,8 +169,12 @@ const Createorders = ({ setNavbarIndex, socket }) => {
                                             <h3>{product.category}</h3>
                                             <h3><span>$</span>{product.price}</h3>
                                         </div>
-                                        {orders.some(order => order._id === product._id) ? <button onClick={() => handleDelete(product._id)}>-Delete</button>
-                                            : <button onClick={() => handleAdd(product)}>+Add</button>}
+                                        {product.isVisible?
+                                            orders.some(order => order._id === product._id) ? <button onClick={() => handleDelete(product._id)}>-Delete</button>
+                                            : <button onClick={() => handleAdd(product)}>+Add</button>
+                                        :
+                                            <h4>Currently Unvailable</h4>
+                                        }
                                     </div>
                                 ))}
                             </div>
@@ -220,7 +224,7 @@ const Createorders = ({ setNavbarIndex, socket }) => {
                         </div>
                         {sError && <p style={{ marginTop: '10px', color: '#f54749', textAlign: 'center' }}>{sError}</p>}
                         {sSuccess && <p style={{ marginTop: '10px', color: 'rgb(0, 126, 51)', textAlign: 'center' }}>Order submitted successfully</p>}
-                        {sLoading && <CircularProgress style={{ marginTop: '10px' }} />}
+                        {sLoading && <CircularProgress className='sloading' />}
                     </div>
                 </div>
             }

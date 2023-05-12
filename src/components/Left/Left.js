@@ -17,7 +17,7 @@ const Order = ({ order, orders, setOrders, socket }) => {
             const token = Cookies.get('token');
             setLoading(true);
             setError(false)
-            const res = await request.put('/order/chief', { id, status, msg }, {
+            const res = await request.put('/order/chef', { id, status, msg }, {
                 headers: { token: 'Bearer ' + token }
             });
             socket.emit('changeStatus', res.data);

@@ -1,4 +1,4 @@
-import './Chief.scss';
+import './Chef.scss';
 import Cookies from 'js-cookie';
 import Left from '../../components/Left/Left';
 import Right from '../../components/Right/Right';
@@ -7,7 +7,7 @@ import { request } from '../../api/axiosMethods';
 import { CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const Chief = ({ socket }) => {
+const Chef = ({ socket }) => {
     const navigate = useNavigate();
     const token = Cookies.get('token') || null;
     const [orders, setOrders] = useState(null);
@@ -19,7 +19,7 @@ const Chief = ({ socket }) => {
             try {
                 setLoading(true);
                 setError(null);
-                const res = await request.get('/order/chief', {
+                const res = await request.get('/order/chef', {
                     headers: { token: 'Bearer ' + token }
                 });
                 setOrders(res.data.orders);
@@ -45,7 +45,7 @@ const Chief = ({ socket }) => {
         navigate('/login');
     }
     return (
-        <div className="chief">
+        <div className="chef">
             {loading ? <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></div> :
                 <>
                     <Left orders={orders} setOrders={setOrders} socket={socket} />
@@ -57,4 +57,4 @@ const Chief = ({ socket }) => {
     )
 }
 
-export default Chief
+export default Chef

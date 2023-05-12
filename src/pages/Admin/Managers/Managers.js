@@ -115,7 +115,7 @@ const Manager = ({ i, manager, setManagers, managers, setEditError, setEditLoadi
                     </div>
                     <select value={rule} onChange={(e) => setrule(e.target.value)}>
                         <option value="cashier">Cashier</option>
-                        <option value="chief">Chef</option>
+                        <option value="chef">Chef</option>
                     </select>
                     <button className='edit' disabled={!isChanged || editLoading} onClick={handleEdit}>Edit</button>
                     <button disabled={deleteLoading} className='delete' onClick={handleDelete}>Delete</button>
@@ -257,7 +257,7 @@ const Managers = ({ setNavbarIndex }) => {
                                 <select defaultValue="f" name='rule'>
                                     <option disabled value={'f'}>Select</option>
                                     <option value="cashier">Cashier</option>
-                                    <option value="chief">Chef</option>
+                                    <option value="chef">Chef</option>
                                 </select>
                             </label>
                             <button disabled={addLoading}>add</button>

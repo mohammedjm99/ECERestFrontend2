@@ -12,12 +12,16 @@ const Veproducts = ({ setNavbarIndex }) => {
         setNavbarIndex(8);
     }, [setNavbarIndex]);
 
+
     const [products, setProducts] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
+
+    const [visibilityLoading, setVisibilityLoading] = useState(false);
+    const [visibilityError, setVisibilityError] = useState(false);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -78,6 +82,28 @@ const Veproducts = ({ setNavbarIndex }) => {
         fetch();
     }
 
+    const handleVisibility = ({ id, isVisible }) => {
+        const token = Cookies.get('token');
+        setVisibilityError(false);
+        setVisibilityLoading(true);
+        request.put('/product/ve/visibility', { id, isVisible }, {
+            headers: {
+                token: 'Bearer ' + token
+            }
+        }).then((res) => {
+            setProducts(products.map(product => product._id === res.data._id ? res.data : product));
+            setVisibilityLoading(false);
+        }).catch(e => {
+            if (e.response?.status === 403 || e.response?.status === 401) {
+                Cookies.remove('token');
+                navigate('/login');
+                return;
+            }
+            setVisibilityError(true);
+            setVisibilityLoading(false);
+        })
+    }
+
     return (
         <div className="veproducts">
             <h1>products</h1>
@@ -108,6 +134,7 @@ const Veproducts = ({ setNavbarIndex }) => {
                                     <button><Link to={'/products/ve/' + product._id}>edit</Link></button>
                                     <button disabled={deleteLoading} onClick={() => handleDelete(product._id)} style={{ padding: '5px 10px' }}>delete</button>
                                 </div>
+                                <button className={product.isVisible ? 'visibility hide' : 'visibility show'} disabled={visibilityLoading} onClick={() => handleVisibility({ id: product._id, isVisible: product.isVisible })} style={{ padding: '5px 10px' }}>{product.isVisible ? 'Hide' : 'Show'}</button>
                             </div>
                         ))
                     }
